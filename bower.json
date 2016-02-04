@@ -2,7 +2,7 @@
   "name": "angular-users",
   "main": [
     "scripts/directives/user-switches.js",
-    "scripts/services/users.js",
+    "scripts/services/users.js"
   ],
   "homepage": "https://github.com/Life-Letters/angular-user-service",
   "authors": [

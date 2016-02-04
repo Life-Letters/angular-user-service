@@ -30,6 +30,7 @@ angular.module('life.users', ['ngLodash', 'ngCookies'])
     };
   })
   .service('users', function (
+      $rootScope,
       $http,
       $location,
       $cookies,
@@ -46,7 +47,7 @@ angular.module('life.users', ['ngLodash', 'ngCookies'])
         ];
 
     // Expose the user to the view
-    var loggedInUser = null;
+    $rootScope.loggedInUser = null;
 
     // Adds instance specific methods to the user object
     function initUser(user) {
@@ -59,9 +60,12 @@ angular.module('life.users', ['ngLodash', 'ngCookies'])
         return lodash.concat(user.title?[user.title]:[], [user.firstName, user.lastName]).join(' ');
       };
 
-      // Add type helper methods, e.g. isPatient
+      // Add helper methods for type, e.g. isPatient
+      user.is = function(type) {
+        return user.userType === type; // simple match for speed reasons
+      }; 
       angular.forEach(userTypes, function(type) {
-        user['is'+type] = function() { return (''+user.userType).toLowerCase() === type.toLowerCase(); }
+        user['is'+type] = function() { return user.is(type); }
       });
 
       user.fetch = function(type, instance) {
@@ -77,7 +81,7 @@ angular.module('life.users', ['ngLodash', 'ngCookies'])
       }
 
       user.isLoggedInUser = function() { 
-        return user.id === loggedInUser.id; 
+        return user.id === $rootScope.loggedInUser.id; 
       }
 
       user.sync = function() {
@@ -120,6 +124,7 @@ angular.module('life.users', ['ngLodash', 'ngCookies'])
             'title',
             'firstName',
             'lastName',
+            'userType',
           ];
 
       if ( lodash.intersection(minimum, lodash.keys(user)).length !== minimum.length ) {
@@ -131,12 +136,12 @@ angular.module('life.users', ['ngLodash', 'ngCookies'])
       $http.defaults.headers.common.Authorization = user.authToken;
       $cookies.putObject(userCookieName, _.pick(user, minimum));
 
-      return loggedInUser = user;
+      return $rootScope.loggedInUser = user;
     }
 
     function clearCurrentUser() {
       $http.defaults.headers.common.Authorization = '';
-      loggedInUser = null;
+      $rootScope.loggedInUser = null;
       $cookies.remove(userCookieName);
     }
 
@@ -144,12 +149,12 @@ angular.module('life.users', ['ngLodash', 'ngCookies'])
     if ( _.isObject( $cookies.getObject(userCookieName) ) ) {
       setCurrentUser( $cookies.getObject(userCookieName) );
 
-      if ( loggedInUser ) {
+      if ( $rootScope.loggedInUser ) {
         // Flesh out the user. This also lets us check the session is still valid.
-        fetchUserData( loggedInUser.id )
+        fetchUserData( $rootScope.loggedInUser.id )
           .then(function(user) {
             // Copy the rest of the values across
-            lodash.extend(loggedInUser, user);
+            lodash.extend($rootScope.loggedInUser, user);
           }, function(err) {
             // Session has expired
             clearCurrentUser();
@@ -200,7 +205,7 @@ angular.module('life.users', ['ngLodash', 'ngCookies'])
         clearCurrentUser();
       },
       getLoggedInUser: function() {
-        return loggedInUser;
+        return $rootScope.loggedInUser;
       },
       isEmailAvailable: function(email) {
         var url = userService.url+'users/email-available',

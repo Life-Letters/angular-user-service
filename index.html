@@ -5,6 +5,8 @@
 	<style>
 		.form-control { margin-bottom: 5px; }
 		pre { font-size: 8pt; }
+		h4 { border-top: 1px solid rgba(0,0,0,0.1); margin-top:40px; padding-top:10px; }
+		p { color: #aaa; font-size:10pt; }
 	</style>
 </head>
 <body ng-controller="main">
@@ -18,16 +20,43 @@
 					<input type="text" class="form-control" ng-model="credentials.email" placeholder="email">						
 					<input type="password" class="form-control" ng-model="credentials.password" placeholder="password">		<button type="submit" class="form-control btn btn-primary">Login</button>
 				</form>
-				<hr>
+
+				<h4>Actions.</h4>
 				<a ng-click="logout()">Log out</a><br>
-				<hr>
-				<div ng-repeat="type in userTypes">
-					is {{ type }}: {{ isType(type) | json }}
+
+				<h4>Type check.</h4>
+				<p>
+					Uses the <code>isClinician</code>, <code>isPatient</code>, etc functions.
+				</p>
+				<p>
+					<span ng-repeat="type in userTypes">
+						<label class="label label-default" ng-class="{'label-success': loggedInUser['is'+type]()}">{{ type }}</label>
+					</span>
+				</p>
+
+				<h4>Conditionals.</h4>
+				<p>
+					Controlled via the <code>show-user</code> and <code>show-anonymous</code> directives.
+				</p>
+				<div class="list-group">
+					<div class="list-group-item" show-anonymous>
+						Anonymous user content
+					</div>
+					<div class="list-group-item" show-user>
+						Logged in user content
+					</div>
+					<div class="list-group-item" show-user="Patient">
+						Patient only content
+					</div>
+					<div class="list-group-item" show-user="Clinician">
+						Clinician only content
+					</div>
 				</div>
 			</div><!-- .col-sm-6 -->
+
 			<div class="col-sm-4">
 				<h3>User</h3>
-				<pre>{{ user | json }}</pre>
+				<pre>{{ loggedInUser | json }}</pre>
 			</div><!-- .col-sm-4 -->
 			<div class="col-sm-4">
 				<h3>Orders</h3>
@@ -39,7 +68,8 @@
 	<script src="bower_components/angular/angular.js"></script>
 	<script src="bower_components/ng-lodash/build/ng-lodash.js"></script>
 	<script src="bower_components/angular-cookies/angular-cookies.js"></script>
-	<script src="angular-users.js"></script>
+	<script src="scripts/services/users.js"></script>
+	<script src="scripts/directives/user-switches.js"></script>
 
 	<script>
 		angular.module('demo', ['life.users'])
@@ -51,21 +81,18 @@
 					});
 			})
 			.controller('main', function($scope, users) {
-
+				$scope.credentials = {};
 				$scope.userTypes = users.userTypes;
-				$scope.user = users.getLoggedInUser();
 				$scope.orders = [];
 
-				$scope.$watch('user', function() {
-					if ( $scope.user ) {
-						$scope.user.fetchOrders()
-							.then(function(orders) { 
-								$scope.orders = orders; 
-							});
-					}
+				$scope.$watch('loggedInUser', function() {
+					if ( !$scope.loggedInUser ) { return; }
+					$scope.loggedInUser.fetchOrders()
+						.then(function(orders) { 
+							$scope.orders = orders; 
+						});
 				})
 
-				$scope.credentials = {};
 				$scope.login = function() {
 					users.logIn($scope.credentials.email, $scope.credentials.password)
 						.then(function(user) {
@@ -74,9 +101,6 @@
 				};
 				$scope.logout = function() {
 					users.logOut();
-				};
-				$scope.isType = function(type) {
-					return users.getLoggedInUser() && users.getLoggedInUser()['is'+type]();
 				};
 			});
 	</script>

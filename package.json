@@ -2,7 +2,10 @@
   "name": "angular-user-service",
   "version": "1.0.0",
   "description": "Manages Life Letter users",
-  "main": "angular-user-service.js",
+  "main": [
+    "scripts/services/users.js",
+    "scripts/directives/user-is.js",
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"

@@ -1,0 +1,24 @@
+{
+  "name": "angular-user-service",
+  "version": "1.0.0",
+  "description": "Manages Life Letter users",
+  "main": "angular-user-service.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Life-Letters/angular-user-service.git"
+  },
+  "author": "Torben Sko <torben.sko@lifeletters.com.au>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Life-Letters/angular-user-service/issues"
+  },
+  "homepage": "https://github.com/Life-Letters/angular-user-service#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "morgan": "^1.6.1"
+  }
+}

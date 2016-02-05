@@ -7,9 +7,16 @@ angular.module('life.users')
   .directive('showUser', function ($rootScope) {
     return {
       link: function postLink(scope, element, attrs) {
+        // ''         = no condition / ignore
+        // 'true'     = user logged in
+        // 'false'    = no user
+        // 'String'   = match user type
         $rootScope.$watch('loggedInUser.userType', function() {
-          if ( $rootScope.loggedInUser && (attrs.showUser === '' || $rootScope.loggedInUser.is(attrs.showUser)) ) {
-            element.attr('style', '');
+          if ( attrs.showUser === '' ||
+              (!$rootScope.loggedInUser && attrs.showUser === 'false') ||
+              $rootScope.loggedInUser && (attrs.showUser === 'true' || $rootScope.loggedInUser.is(attrs.showUser)) ) {
+
+            element.attr('style', (element.attr('style')+'').replace('display:none;', ''));
           } else {
             element.attr('style', 'display:none;');
           }
@@ -24,7 +31,7 @@ angular.module('life.users')
           if ( $rootScope.loggedInUser ) {
             element.attr('style', 'display:none;');
           } else {
-            element.attr('style', '');
+            element.attr('style', (element.attr('style')+'').replace('display:none;', ''));
           }
         });
       }

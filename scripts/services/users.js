@@ -7,7 +7,7 @@
  * # userService
  * Service in the lifelettersApp.
  */
-angular.module('life.users', ['ngLodash', 'ngCookies'])
+angular.module('life.users')
   .provider('userService', function () {
     
     var url = null,

@@ -8,7 +8,6 @@ angular.module('life.users')
     return {
       link: function postLink(scope, element, attrs) {
         $rootScope.$watch('loggedInUser.userType', function() {
-          console.log(attrs.showUser);
           if ( $rootScope.loggedInUser && (attrs.showUser === '' || $rootScope.loggedInUser.is(attrs.showUser)) ) {
             element.attr('style', '');
           } else {

@@ -46,6 +46,11 @@ angular.module('life.users')
           'Patient',
         ];
 
+    if (!userService) {
+      $log.error('no userService - have you called userServiceProvider.setUrl?');
+      return;
+    }
+
     // Expose the user to the view
     $rootScope.loggedInUser = null;
 
@@ -97,9 +102,11 @@ angular.module('life.users')
       };
 
       // Add custom behaviour to the user
-      angular.forEach(userService.behaviours, function(func, name) {
-        user[name] = function() { return func(user, arguments); };
-      });
+      if ( userService ) {
+        angular.forEach(userService.behaviours, function(func, name) {
+          user[name] = function() { return func(user, arguments); };
+        });
+      }
 
       return user;
     }

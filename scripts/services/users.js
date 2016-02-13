@@ -85,6 +85,17 @@ angular.module('life.users')
           });
       }
 
+      user.create = function(type, body) {
+        var path = userService.url+'users/'+user.id+'/'+type;
+        return $http.post(path, body)
+          .then(function(response) {
+            return response.data;
+          }, function(e) {
+            $log.warn(e);
+            return $q.reject(e);
+          });
+      }
+
       user.isLoggedInUser = function() { 
         return user.id === $rootScope.loggedInUser.id; 
       }
@@ -273,7 +284,12 @@ angular.module('life.users')
        * @return {[type]} [description]
        */
       fetchUser: function(id) {
-        return initUser(fetchUserData(id));
+        return fetchUserData(id)
+          .then(function(user) {
+            return initUser(user);
+          }, function() {
+            return $q.reject();
+          });
       },
     };
   });

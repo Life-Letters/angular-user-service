@@ -15,6 +15,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-4">
+
 				<h3>Login</h3>
 				<form novalidate ng-submit="login()">
 					<input type="text" class="form-control" ng-model="credentials.email" placeholder="email">						
@@ -52,6 +53,24 @@
 						Clinician only content
 					</div>
 				</div>
+
+				<h4>Validators.</h4>
+				<p>Email available</p>
+				<form name="emailAvailable">
+					<div class="form-group" ng-class="{'has-error': emailAvailable.email.$invalid}">
+		        <label class="control-label" for="email">Email</label>
+		        <input type="email" name="email" class="form-control" placeholder="Email"
+		        		ng-model="email"
+		        		required email-available />
+
+		        <p class="help-block" ng-if="emailAvailable.email.$error.required">
+		        	Email is required</p>
+		        <p class="help-block" ng-if="emailAvailable.email.$error.email">
+		        	Not recognised as an email address</p>
+		        <p class="help-block" ng-if="emailAvailable.email.$error.emailAvailable">
+		        	Email address is already taken</p>
+      		</div>
+				</form>
 			</div><!-- .col-sm-6 -->
 
 			<div class="col-sm-4">
@@ -72,13 +91,13 @@
 	<script src="scripts/module.js"></script>
 	<script src="scripts/services/users.js"></script>
 	<script src="scripts/directives/user-switches.js"></script>
+	<script src="scripts/directives/email-available.js"></script>
 
 	<script>
 		angular.module('demo', ['life.users'])
 			.config(function(userServiceProvider) {
 				userServiceProvider.setUrl('http://localhost:3000/api/v1/');
-				userServiceProvider.addBehaviour('fetchOrders',
-					function(user) { 
+				userServiceProvider.addBehaviour('fetchOrders', function(user) { 
 						return user.fetch('orders');
 					});
 			})

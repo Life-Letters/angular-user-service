@@ -3,7 +3,8 @@
   "main": [
     "scripts/module.js",
     "scripts/services/users.js",
-    "scripts/directives/user-switches.js"
+    "scripts/directives/user-switches.js",
+    "scripts/directives/email-available.js"
   ],
   "homepage": "https://github.com/Life-Letters/angular-user-service",
   "authors": [
@@ -20,10 +21,8 @@
     "test",
     "tests"
   ],
-  "devDependencies": {
-    "angular": "~1.4.9"
-  },
   "dependencies": {
+    "angular": "~1.4.9",
     "ng-lodash": "~0.4.0",
     "angular-cookies": "~1.4.9"
   }

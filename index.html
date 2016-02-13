@@ -95,9 +95,9 @@
 
 	<script>
 		angular.module('demo', ['life.users'])
-			.config(function(userServiceProvider) {
-				userServiceProvider.setUrl('http://localhost:3000/api/v1/');
-				userServiceProvider.addBehaviour('fetchOrders', function(user) { 
+			.config(function(usersProvider) {
+				usersProvider.setUrl('http://localhost:3000/api/v1/');
+				usersProvider.addBehaviour('fetchOrders', function(user) { 
 						return user.fetch('orders');
 					});
 			})

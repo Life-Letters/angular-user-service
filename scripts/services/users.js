@@ -51,8 +51,8 @@ angular.module('life.users')
           user['is'+type] = function() { return user.is(type); }
         });
 
-        user.fetch = function(type, instance) {
-          var path = rootUrl+'users/'+user.id+'/'+type+(instance ? '/'+instance : '');
+        user.fetch = function(type, id) {
+          var path = rootUrl+'users/'+user.id+'/'+type+(id ? '/'+id : '');
 
           return $http.get(path)
             .then(function(response) {
@@ -225,7 +225,7 @@ angular.module('life.users')
         findClinician: function(code) {
           var url = rootUrl+'users/exists',
               body = {
-                shortCode: code,
+                referralCode: code,
                 email: code,
                 ahpraNumber: code,
               };

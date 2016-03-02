@@ -139,8 +139,6 @@ angular.module('life.users')
         $cookies.remove(userCookieName);
       }
 
-      console.log($cookies.getObject(userCookieName));
-
       // Restore the user from previous session
       if ( _.isObject( $cookies.getObject(userCookieName) ) ) {
         setCurrentUser( $cookies.getObject(userCookieName) );

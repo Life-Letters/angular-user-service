@@ -12,7 +12,7 @@ angular.module('life.users')
     
     var rootUrl = null,
         behaviours = {},
-        userCookieName = 'lifeletteruser',
+        userCookieName = 'lifeletteruser'+(window.cookies ? '-'+window.cookies:''),
         userTypes = [
           'Clinician',
           'Patient',

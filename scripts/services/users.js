@@ -159,20 +159,11 @@ angular.module('life.users')
       return {
         userTypes: userTypes,
         createUser: function(details) {
-          var url = rootUrl;
-
-          switch( details.type ) {
-            case 'customer':
-              url += 'customers';
-              break;
-            case 'counsellor':
-            case 'clinician':
-              url += 'clinicians';
-              break;
-            default:
-              $log.error('missing type');
-              return $q.reject();
+          if( !details.type ) {
+            $log.error('missing type');
+            return $q.reject();
           }
+          var url = rootUrl+details.type+'s';
 
           return $http.post(url, details)
             .then(function(response) {

@@ -241,14 +241,12 @@ angular.module('life.users')
         },
         // TODO
         setPassword: function(/* password, authToken */) {
-          // console.log(password, authToken);
           var defer = $q.defer();
           $timeout(function() { defer.resolve(); });
           return defer.promise;
         },
         // TODO
         isValidPasswordChangeToken: function(/* authToken */) {
-          // console.log(authToken);
           var defer = $q.defer();
           $timeout(function() { defer.resolve(); });
           return defer.promise;

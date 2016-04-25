@@ -11,6 +11,7 @@ angular.module('life.users')
   .provider('users', function () {
     
     var rootUrl = null,
+        loginPath = '/login',
         behaviours = {},
         userCookieName = 'lifeletteruser'+(window.cookies ? '-'+window.cookies:''),
         userTypes = [
@@ -18,7 +19,12 @@ angular.module('life.users')
           'Patient',
         ];;
 
-    this.setUrl = function(url) { rootUrl = url; };
+    this.setUrl = function(url) { 
+      rootUrl = url; 
+    };
+    this.setLoginPath = function(url) { 
+      logingUrl = url; 
+    };
     this.addBehaviour = function(name, func) { 
       behaviours[name] = func; 
     };
@@ -157,6 +163,7 @@ angular.module('life.users')
       }
       
       return {
+        loginPath: loginPath,
         userTypes: userTypes,
         createUser: function(details) {
           if( !details.type ) {

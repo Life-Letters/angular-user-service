@@ -7,15 +7,15 @@ angular.module('life.users')
   .directive('showUser', function ($rootScope) {
     return {
       link: function postLink(scope, element, attrs) {
-        // ''         = no condition / ignore
-        // 'true'     = user logged in
-        // 'false'    = no user
+        // ''         = user logged in
         // 'String'   = match user type
         $rootScope.$watch('loggedInUser.userType', function() {
-          if ( attrs.showUser === '' ||
-              (!$rootScope.loggedInUser && attrs.showUser === 'false') ||
-              $rootScope.loggedInUser && (attrs.showUser === 'true' || $rootScope.loggedInUser.is(attrs.showUser)) ) {
 
+          var loggedIn = $rootScope.loggedInUser,
+              userType = loggedIn ? $rootScope.loggedInUser.userType : '',
+              expected = attrs.showUser ? attrs.showUser : '';
+
+          if ( loggedIn && (!expected.length || userType === expected)) {
             element.attr('style', (element.attr('style')+'').replace('display:none;', ''));
           } else {
             element.attr('style', 'display:none;');

@@ -22,6 +22,8 @@
 					<input type="password" class="form-control" ng-model="credentials.password" placeholder="password">		<button type="submit" class="form-control btn btn-primary">Login</button>
 				</form>
 
+				<a ng-click="fetchUser()">Refresh/fetch user details</a>
+
 				<h4>Actions.</h4>
 				<a ng-click="logout()">Log out</a><br>
 
@@ -90,16 +92,18 @@
 
 	<script src="scripts/module.js"></script>
 	<script src="scripts/services/users.js"></script>
+	<script src="scripts/services/user-interceptor.js"></script>
 	<script src="scripts/directives/user-switches.js"></script>
 	<script src="scripts/directives/email-available.js"></script>
 
 	<script>
 		angular.module('demo', ['life.users'])
-			.config(function(usersProvider) {
-				usersProvider.setUrl('http://localhost:3000/api/v1/');
+			.config(function ($httpProvider, usersProvider) {
+				usersProvider.setUrl('https://ll-user-service-dev.herokuapp.com/api/v1/');
 				usersProvider.addBehaviour('fetchOrders', function(user) { 
 						return user.fetch('orders');
 					});
+				$httpProvider.interceptors.push('userInterceptor');
 			})
 			.controller('main', function($scope, users) {
 				$scope.credentials = {};
@@ -112,7 +116,11 @@
 						.then(function(orders) { 
 							$scope.orders = orders; 
 						});
-				})
+				});
+
+				$scope.fetchUser = function() {
+					users.fetchUser(1);
+				};
 
 				$scope.login = function() {
 					users.logIn($scope.credentials.email, $scope.credentials.password)

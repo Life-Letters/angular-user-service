@@ -3,8 +3,9 @@
   "main": [
     "scripts/module.js",
     "scripts/services/users.js",
+    "scripts/services/user-interceptor.js",
     "scripts/directives/user-switches.js",
-    "scripts/directives/email-available.js"
+    "scripts/directives/email-available.js",
   ],
   "homepage": "https://github.com/Life-Letters/angular-user-service",
   "authors": [
